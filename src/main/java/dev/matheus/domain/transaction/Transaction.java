@@ -3,6 +3,7 @@ package dev.matheus.domain.transaction;
 import dev.matheus.domain.user.User;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -32,5 +33,6 @@ public class Transaction extends PanacheEntityBase {
     public User receiver;
 
     // Timestamp da transação
+    @CreationTimestamp
     public LocalDateTime timestamp;
 }
