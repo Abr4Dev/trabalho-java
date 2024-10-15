@@ -2,9 +2,11 @@ package dev.matheus.services;
 
 import dev.matheus.entitys.user.User;
 import dev.matheus.entitys.user.UserType;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.Path;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Path("/users")
 public class UserService {
@@ -25,7 +27,13 @@ public class UserService {
         return User.findById(id);
     }
 
-    public void saveUser(User user) {
+    public List<User> listUsers() {
+        return User.listAll();
+    }
+
+    @Transactional
+    public User saveUser(User user) {
         user.persist();
+        return user;
     }
 }
