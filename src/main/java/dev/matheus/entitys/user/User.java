@@ -1,4 +1,4 @@
-package dev.matheus.domain.user;
+package dev.matheus.entitys.user;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
@@ -37,4 +37,5 @@ public class User extends PanacheEntityBase {
     // Tipo de usuário
     @Enumerated(EnumType.STRING)
     public UserType userType;
+
 }

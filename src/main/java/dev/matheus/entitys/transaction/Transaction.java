@@ -1,6 +1,6 @@
-package dev.matheus.domain.transaction;
+package dev.matheus.entitys.transaction;
 
-import dev.matheus.domain.user.User;
+import dev.matheus.entitys.user.User;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
