@@ -1,4 +1,4 @@
-package dev.matheus.domain.user;
+package dev.matheus.entitys.user;
 
 public enum UserType {
 
