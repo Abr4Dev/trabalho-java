@@ -2,7 +2,6 @@ package dev.matheus.entitys.user;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 
 @Entity(name = "users")

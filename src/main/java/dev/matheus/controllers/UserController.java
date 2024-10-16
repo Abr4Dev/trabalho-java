@@ -4,12 +4,9 @@ import dev.matheus.entitys.user.User;
 import dev.matheus.services.UserService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
-
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
 import java.util.List;
-
 
 @Path("/users")
 @Produces(MediaType.APPLICATION_JSON)
