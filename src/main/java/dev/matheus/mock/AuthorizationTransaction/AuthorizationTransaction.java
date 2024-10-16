@@ -7,7 +7,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
 @Path("/api/v2/authorize")
-@RegisterRestClient(configKey = "auth-api")
+@RegisterRestClient(configKey = "mock-api")
 public interface AuthorizationTransaction {
 
     @GET

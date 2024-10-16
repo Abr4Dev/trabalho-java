@@ -8,7 +8,7 @@ import jakarta.ws.rs.core.MediaType;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 @Path("/api/v1/notify")
-@RegisterRestClient(configKey = "notify-api")
+@RegisterRestClient(configKey = "mock-api")
 public interface SendNotification {
 
     @POST
