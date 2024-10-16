@@ -5,14 +5,18 @@ import dev.matheus.entitys.user.User;
 import dev.matheus.mock.AuthorizationTransaction.AuthorizationTransactionResponse;
 import dev.matheus.mock.AuthorizationTransaction.AuthorizationTransaction;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 @ApplicationScoped
 public class TransactionService {
 
+    @Inject
+    @RestClient
     AuthorizationTransaction authorizationTransaction;
 
     public boolean authorizeTransaction() {
-        AuthorizationTransactionResponse response = this.authorizationTransaction.authorize();
+        AuthorizationTransactionResponse response = authorizationTransaction.authorize();
         if (response != null && response.data != null) {
             return response.data.authorization;
         } else {
