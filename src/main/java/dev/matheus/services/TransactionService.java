@@ -2,6 +2,7 @@ package dev.matheus.services;
 
 import dev.matheus.entitys.transaction.Transaction;
 import dev.matheus.entitys.user.User;
+import org.jboss.resteasy.reactive.ClientWebApplicationException;
 import dev.matheus.mock.AuthorizationTransaction.AuthorizationTransactionResponse;
 import dev.matheus.mock.AuthorizationTransaction.AuthorizationTransaction;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -16,12 +17,12 @@ public class TransactionService {
     @RestClient
     AuthorizationTransaction authorizationTransaction;
 
-    public boolean authorizeTransaction() {
-        AuthorizationTransactionResponse response = authorizationTransaction.authorize();
-        if (response != null && response.data != null) {
-            return response.data.authorization;
-        } else {
-            return false;
+    public boolean authorizeTransaction() throws Exception {
+        try {
+            AuthorizationTransactionResponse response = authorizationTransaction.authorize();
+            return response != null && response.data != null && response.data.authorization;
+        } catch (ClientWebApplicationException err) {
+            throw new Exception("Transação recusada!");
         }
     }
 
@@ -35,7 +36,9 @@ public class TransactionService {
         User receiver = userService.findUserById(newTransaction.receiver.id);
         userService.validadeTransaction(sender, newTransaction.amount);
 
-        // ADD MOCK
+        // MOCK de Autorização da transação
+        if (!authorizeTransaction())
+            throw new Exception("Transação recusada!");
 
          sender.balance = sender.balance.subtract(newTransaction.amount);
          receiver.balance = receiver.balance.add(newTransaction.amount);

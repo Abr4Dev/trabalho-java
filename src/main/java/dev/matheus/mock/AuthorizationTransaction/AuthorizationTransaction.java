@@ -1,5 +1,6 @@
 package dev.matheus.mock.AuthorizationTransaction;
 
+import jakarta.ws.rs.Consumes;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -12,5 +13,6 @@ public interface AuthorizationTransaction {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     AuthorizationTransactionResponse authorize();
 }
