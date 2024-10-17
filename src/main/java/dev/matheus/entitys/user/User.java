@@ -16,7 +16,7 @@ public class User extends PanacheEntityBase {
     // Primeiro nome do usuário
     public String firstName;
 
-    // Segundo nome do usuário
+    // Sobre nome do usuário
     public String lastName;
 
     // CPF do usuário com regra para cadastro único

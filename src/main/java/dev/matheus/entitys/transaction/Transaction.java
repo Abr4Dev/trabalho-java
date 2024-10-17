@@ -19,14 +19,12 @@ public class Transaction extends PanacheEntityBase {
     // Valor da transação
     public BigDecimal amount;
 
-    // Usuário que envia (Uma transação só pode ter um usuário que envia!)
-    // Modelando a relação das tabelas
+    // Usuário que envia (Em uma transação, só há um usuário que envia)
     @ManyToOne
     @JoinColumn(name = "sender_id")
     public User sender;
 
-    // Usuário que recebe (Uma transação só pode ter um usuário que recebe!)
-    // Modelando a relação das tabelas
+    // Usuário que recebe (Em uma transação, só há um usuário que recebe)
     @ManyToOne
     @JoinColumn(name = "receiver_id")
     public User receiver;
