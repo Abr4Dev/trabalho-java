@@ -1,5 +1,6 @@
 package dev.matheus.services;
 
+import dev.matheus.dto.PayloadTransaction;
 import dev.matheus.entitys.transaction.Transaction;
 import dev.matheus.entitys.user.User;
 import org.jboss.resteasy.reactive.ClientWebApplicationException;
@@ -14,6 +15,33 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 public class TransactionService {
 
     @Inject
+    private UserService userService;
+
+    @Transactional
+    public Transaction createTransaction(PayloadTransaction payloadTransaction) throws  Exception{
+
+        User sender = userService.findUserById(payloadTransaction.senderId);
+        User receiver = userService.findUserById(payloadTransaction.receiverId);
+        userService.validadeTransaction(sender, payloadTransaction.amount);
+
+        // MOCK de Autorização da transação
+        if (!authorizeTransaction())  throw new Exception("Transação recusada!");
+
+        sender.balance = sender.balance.subtract(payloadTransaction.amount);
+        receiver.balance = receiver.balance.add(payloadTransaction.amount);
+
+        Transaction transaction = new Transaction();
+
+        transaction.sender = userService.saveUser(sender);
+        transaction.receiver = userService.saveUser(receiver);
+        transaction.persist();
+
+         // ADD MOCK
+
+         return transaction;
+    }
+
+    @Inject
     @RestClient
     AuthorizationTransaction authorizationTransaction;
 
@@ -24,31 +52,5 @@ public class TransactionService {
         } catch (ClientWebApplicationException err) {
             throw new Exception("Transação recusada!");
         }
-    }
-
-    @Inject
-    private UserService userService;
-
-    @Transactional
-    public Transaction createTransaction(Transaction newTransaction) throws  Exception{
-
-        User sender = userService.findUserById(newTransaction.sender.id);
-        User receiver = userService.findUserById(newTransaction.receiver.id);
-        userService.validadeTransaction(sender, newTransaction.amount);
-
-        // MOCK de Autorização da transação
-        if (!authorizeTransaction())
-            throw new Exception("Transação recusada!");
-
-         sender.balance = sender.balance.subtract(newTransaction.amount);
-         receiver.balance = receiver.balance.add(newTransaction.amount);
-
-         newTransaction.sender = userService.saveUser(sender);
-         newTransaction.receiver = userService.saveUser(receiver);
-         newTransaction.persist();
-
-         // ADD MOCK
-
-         return newTransaction;
     }
 }

@@ -11,6 +11,16 @@ import java.util.List;
 @Path("/users")
 public class UserService {
 
+    public List<User> listUsers() {
+        return User.listAll();
+    }
+
+    @Transactional
+    public User saveUser(User user) {
+        user.persist();
+        return user;
+    }
+
     public void validadeTransaction(User sender, BigDecimal amount) throws Exception {
         if(sender.userType == UserType.MERCHANT) {
             throw new Exception("Usuário do tipo Lojista não está autorizado a realizar transação");
@@ -25,15 +35,5 @@ public class UserService {
             throw new Exception("Usuário não encontrado");
         }
         return User.findById(id);
-    }
-
-    public List<User> listUsers() {
-        return User.listAll();
-    }
-
-    @Transactional
-    public User saveUser(User user) {
-        user.persist();
-        return user;
     }
 }

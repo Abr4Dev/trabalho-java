@@ -11,22 +11,22 @@ import java.time.LocalDateTime;
 @Table(name = "tb_transactions")
 public class Transaction extends PanacheEntityBase {
 
-    // Id da transação no banco de dados
+    // Id da transação
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
-    // Valor da transação
+    // Valor da transferência
     public BigDecimal amount;
 
-    // Usuário que envia (Uma transação só pode ter um usuário que envia!)
-    // Modelando a relação das tabelas
+    // Usuário que envia na transferência
+    // Muitos-para-um: várias transações podem ser feitas por um mesmo usuário
     @ManyToOne
     @JoinColumn(name = "sender_id")
     public User sender;
 
-    // Usuário que recebe (Uma transação só pode ter um usuário que recebe!)
-    // Modelando a relação das tabelas
+    // Usuário que recebe na transferência
+    // Muitos-para-um: várias transações podem ser feitas por um mesmo usuário
     @ManyToOne
     @JoinColumn(name = "receiver_id")
     public User receiver;

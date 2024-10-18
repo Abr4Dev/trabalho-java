@@ -1,5 +1,6 @@
 package dev.matheus.controllers;
 
+import dev.matheus.dto.PayloadTransaction;
 import dev.matheus.entitys.transaction.Transaction;
 import dev.matheus.services.TransactionService;
 import jakarta.inject.Inject;
@@ -18,11 +19,12 @@ public class TransactionController {
     @Inject
     TransactionService transactionService;
 
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createTransaction(Transaction newTransaction) throws Exception {
-        Transaction createTransaction = transactionService.createTransaction(newTransaction);
+    public Response createTransaction(PayloadTransaction payloadTransaction) throws Exception {
+        Transaction createTransaction = transactionService.createTransaction(payloadTransaction);
         return Response.status(Response.Status.CREATED).entity(createTransaction).build();
     }
 }
