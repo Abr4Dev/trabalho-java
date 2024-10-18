@@ -1,11 +1,11 @@
 package dev.matheus.services;
 
-import dev.matheus.dto.PayloadTransaction;
+import dev.matheus.dtos.requests.RequestTransaction;
 import dev.matheus.entitys.transaction.Transaction;
 import dev.matheus.entitys.user.User;
 import org.jboss.resteasy.reactive.ClientWebApplicationException;
-import dev.matheus.mock.AuthorizationTransaction.AuthorizationTransactionResponse;
-import dev.matheus.mock.AuthorizationTransaction.AuthorizationTransaction;
+import dev.matheus.dtos.responses.ResponseAuthorizationTransaction;
+import dev.matheus.mocks.AuthorizationTransaction.AuthorizationTransaction;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -18,17 +18,17 @@ public class TransactionService {
     private UserService userService;
 
     @Transactional
-    public Transaction createTransaction(PayloadTransaction payloadTransaction) throws  Exception{
+    public Transaction createTransaction(RequestTransaction requestTransaction) throws  Exception{
 
-        User sender = userService.findUserById(payloadTransaction.senderId);
-        User receiver = userService.findUserById(payloadTransaction.receiverId);
-        userService.validadeTransaction(sender, payloadTransaction.amount);
+        User sender = userService.findUserById(requestTransaction.senderId);
+        User receiver = userService.findUserById(requestTransaction.receiverId);
+        userService.validadeTransaction(sender, requestTransaction.amount);
 
         // MOCK de Autorização da transação
         if (!authorizeTransaction())  throw new Exception("Transação recusada!");
 
-        sender.balance = sender.balance.subtract(payloadTransaction.amount);
-        receiver.balance = receiver.balance.add(payloadTransaction.amount);
+        sender.balance = sender.balance.subtract(requestTransaction.amount);
+        receiver.balance = receiver.balance.add(requestTransaction.amount);
 
         Transaction transaction = new Transaction();
 
@@ -47,7 +47,7 @@ public class TransactionService {
 
     public boolean authorizeTransaction() throws Exception {
         try {
-            AuthorizationTransactionResponse response = authorizationTransaction.authorize();
+            ResponseAuthorizationTransaction response = authorizationTransaction.authorize();
             return response != null && response.data != null && response.data.authorization;
         } catch (ClientWebApplicationException err) {
             throw new Exception("Transação recusada!");

@@ -1,9 +1,9 @@
 package dev.matheus.services;
 
 import dev.matheus.entitys.user.User;
-import dev.matheus.mock.SendNotification.SendNotificationRequest;
-import dev.matheus.mock.SendNotification.SendNotificationResponse;
-import dev.matheus.mock.SendNotification.SendNotification;
+import dev.matheus.dtos.requests.RequestSendNotification;
+import dev.matheus.dtos.responses.ResponseSendNotification;
+import dev.matheus.mocks.SendNotification.SendNotification;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
@@ -14,11 +14,11 @@ public class NotificationService {
     SendNotification sendNotification;
 
     public void sendNotificationEmail(User user, String message) throws Exception {
-        SendNotificationRequest request = new SendNotificationRequest();
+        RequestSendNotification request = new RequestSendNotification();
         request.email = user.email;
         request.mensagem = message;
 
-        SendNotificationResponse response = sendNotification.sendNotification(request);
+        ResponseSendNotification response = sendNotification.sendNotification(request);
 
         if((!"success".equals(response.status))) {
             System.out.println("[DEBUG INFO] - Erro ao enviar notificação");

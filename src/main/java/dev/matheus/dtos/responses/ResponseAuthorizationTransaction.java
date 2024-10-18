@@ -1,7 +1,6 @@
-package dev.matheus.mock.SendNotification;
+package dev.matheus.dtos.responses;
 
-public class SendNotificationResponse {
-
+public class ResponseAuthorizationTransaction {
     public String status;
     public Data data;
 

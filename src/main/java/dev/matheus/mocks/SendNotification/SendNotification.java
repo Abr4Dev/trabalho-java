@@ -1,5 +1,7 @@
-package dev.matheus.mock.SendNotification;
+package dev.matheus.mocks.SendNotification;
 
+import dev.matheus.dtos.requests.RequestSendNotification;
+import dev.matheus.dtos.responses.ResponseSendNotification;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -14,5 +16,5 @@ public interface SendNotification {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    SendNotificationResponse sendNotification(SendNotificationRequest request);
+    ResponseSendNotification sendNotification(RequestSendNotification request);
 }
