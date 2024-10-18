@@ -7,11 +7,13 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+// Entidade Transferência na modelagem do banco de dados
 @Entity(name = "transactions")
 @Table(name = "tb_transactions")
 public class Transaction extends PanacheEntityBase {
 
-    // Id da transação
+    // Id da transferência (Chave primária)
+    // Estratégia de geração automática
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
@@ -19,19 +21,19 @@ public class Transaction extends PanacheEntityBase {
     // Valor da transferência
     public BigDecimal amount;
 
-    // Usuário que envia na transferência
-    // Muitos-para-um: várias transações podem ser feitas por um mesmo usuário
+    // Usuário que envia a transferência
+    // Muitos-para-um: um mesmo usuário pode fazer várias transferências
     @ManyToOne
     @JoinColumn(name = "sender_id")
     public User sender;
 
-    // Usuário que recebe na transferência
-    // Muitos-para-um: várias transações podem ser feitas por um mesmo usuário
+    // Usuário que recebe a transferência
+    // Muitos-para-um: um mesmo usuário pode fazer várias transferências
     @ManyToOne
     @JoinColumn(name = "receiver_id")
     public User receiver;
 
-    // Timestamp da transação
+    // Timestamp da transferência (registra hora e a data da transação)
     @CreationTimestamp
     public LocalDateTime timestamp;
 }

@@ -14,9 +14,12 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 @ApplicationScoped
 public class TransactionService {
 
+    // Injeta dependências
+    // O Quarkus, durante a execução, se encarrega de fornecer uma instância de UserService pronta para uso.
     @Inject
     private UserService userService;
 
+    // Transactional pois o methode altera dados no banco de dados!
     @Transactional
     public Transaction createTransaction(RequestTransaction requestTransaction) throws  Exception{
 
@@ -41,6 +44,9 @@ public class TransactionService {
          return transaction;
     }
 
+    // Injeta dependências
+    // O Quarkus, durante a execução, se encarrega de fornecer uma instância de AuthorizationTransaction pronta para uso.
+    // Retorna se a transação foi aceita, ou dispara uma Exception
     @Inject
     @RestClient
     AuthorizationTransaction authorizationTransaction;

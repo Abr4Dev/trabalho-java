@@ -15,6 +15,7 @@ public class UserService {
         return User.listAll();
     }
 
+    // Transactional pois o methode altera dados no banco de dados!
     @Transactional
     public User saveUser(User user) {
         user.persist();
