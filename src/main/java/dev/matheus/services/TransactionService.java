@@ -39,7 +39,8 @@ public class TransactionService {
         transaction.receiver = userService.saveUser(receiver);
         transaction.persist();
 
-         // ADD MOCK
+        // Adicionar o mock que envia notificação de transferência
+        //**********
 
          return transaction;
     }
