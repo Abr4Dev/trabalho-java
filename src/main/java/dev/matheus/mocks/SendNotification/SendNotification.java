@@ -16,5 +16,5 @@ public interface SendNotification {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    ResponseSendNotification sendNotification(RequestSendNotification request);
+    ResponseSendNotification sendNotification(RequestSendNotification requestSendNotification);
 }

@@ -21,6 +21,12 @@ public class Transaction extends PanacheEntityBase {
     // Valor da transferência
     public BigDecimal amount;
 
+    // Notificação do usuário que envia:
+    public String notifySender;
+
+    // Notificação do usuário que recebe:
+    public String notifyReceiver;
+
     // Usuário que envia a transferência
     // Muitos-para-um: um mesmo usuário pode fazer várias transferências
     @ManyToOne
