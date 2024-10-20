@@ -26,18 +26,19 @@ public class TransactionService {
     @Transactional
     public Transaction createTransaction(RequestTransaction requestTransaction) throws  Exception{
 
-        User sender = userService.findUserById(requestTransaction.senderId);
-        User receiver = userService.findUserById(requestTransaction.receiverId);
+        // Validações das regras de negócio:
+        User sender = userService.findUserSenderById(requestTransaction.senderId);
+        User receiver = userService.findUserReceiverById(requestTransaction.receiverId);
         userService.validadeTransaction(sender, requestTransaction.amount);
 
-        // MOCK de Autorização da transação
-        // Se a autorização falar uma Exception é lançada
-        if (!authorizeTransaction())  throw new Exception("Transação recusada!");
+        // Validação por autorização externa do Mock:
+        authorizeTransaction();
 
+        // Passando por todas às autorizações (não ocorreu nenhuma Exceptions) a transferência é realizada:
         sender.balance = sender.balance.subtract(requestTransaction.amount);
         receiver.balance = receiver.balance.add(requestTransaction.amount);
 
-        // Criando a transferência
+        // Persiste a transferência:
         Transaction transaction = new Transaction();
 
         transaction.amount = requestTransaction.amount;
@@ -56,12 +57,13 @@ public class TransactionService {
     @RestClient
     AuthorizationTransaction authorizationTransaction;
 
-    public boolean authorizeTransaction() throws Exception {
+    // MOCK de Autorização da transação
+    // Se a autorização falhar uma Exception é lançada
+    public void authorizeTransaction() throws Exception {
         try {
             ResponseAuthorizationTransaction response = authorizationTransaction.authorize();
-            return response != null && response.data != null && response.data.authorization;
         } catch (ClientWebApplicationException err) {
-            throw new Exception("Transação recusada!");
+            throw new Exception("Transferência recusada pelo serviço de autorização");
         }
     }
 
@@ -69,13 +71,14 @@ public class TransactionService {
     @RestClient
     SendNotification sendNotification;
 
+    // MOCK que envia notificação
+    // Retorna o feedback da notificação (Sucesso ou Falha)
     public String sendNotificationEmail() {
-        ResponseSendNotification response = new ResponseSendNotification();
-        RequestSendNotification requestSendNotification = new RequestSendNotification();
         String notifyStatus;
+        RequestSendNotification requestSendNotification = new RequestSendNotification();
 
         try {
-            response = sendNotification.sendNotification(requestSendNotification);
+            ResponseSendNotification response = sendNotification.sendNotification(requestSendNotification);
             notifyStatus = "Notificação enviada com sucesso";
             return notifyStatus;
         } catch (ClientWebApplicationException err) {
