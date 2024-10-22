@@ -2,13 +2,13 @@ package dev.matheus.services;
 
 import dev.matheus.entitys.user.User;
 import dev.matheus.entitys.user.UserType;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.Path;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-@Path("/users")
+@ApplicationScoped
 public class UserService {
 
     // Vem de um Controller @GET
@@ -31,7 +31,7 @@ public class UserService {
     // Se o usuário remetente não possuir saldo para transferência, uma Exception é lançada
     public void validadeTransaction(User sender, BigDecimal amount) throws Exception {
         if(sender.userType == UserType.MERCHANT) {
-            throw new Exception("Usuário do tipo Lojista não está autorizado a realizar transferência");
+            throw new Exception("Usuário do tipo lojista não está autorizado a realizar transferências");
         }
         if (sender.balance.compareTo(amount) < 0) {
             throw new Exception("Saldo insuficiente");
@@ -49,7 +49,7 @@ public class UserService {
     // Regra de negócio que busca usuário Destinatário no banco, uma Exception é lançada se o usuário não existir
     public User findUserReceiverById(Long id) throws Exception {
         if (User.findById(id) == null) {
-            throw new Exception("Usuário Destinatário não encontrado");
+            throw new Exception("Usuário destinatário não encontrado");
         }
         return User.findById(id);
     }

@@ -14,6 +14,8 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
+import java.math.BigDecimal;
+
 @ApplicationScoped
 public class TransactionService {
 
@@ -27,6 +29,7 @@ public class TransactionService {
     public Transaction createTransaction(RequestTransaction requestTransaction) throws  Exception{
 
         // Validações das regras de negócio:
+        BigDecimal amount = requestTransaction.amount;
         User sender = userService.findUserSenderById(requestTransaction.senderId);
         User receiver = userService.findUserReceiverById(requestTransaction.receiverId);
         userService.validadeTransaction(sender, requestTransaction.amount);
@@ -41,11 +44,14 @@ public class TransactionService {
         // Persiste a transferência:
         Transaction transaction = new Transaction();
 
-        transaction.amount = requestTransaction.amount;
-        transaction.sender = userService.saveUser(sender);
-        transaction.receiver = userService.saveUser(receiver);
+        transaction.amount = amount;
+        transaction.sender = sender;
+        transaction.receiver = receiver;
         transaction.notifySender = sendNotificationEmail();
         transaction.notifyReceiver = sendNotificationEmail();
+
+        userService.saveUser(sender);
+        userService.saveUser(receiver);
         transaction.persist();
 
         return transaction;
@@ -67,6 +73,8 @@ public class TransactionService {
         }
     }
 
+    // Injeta dependências
+    // O Quarkus, durante a execução, se encarrega de fornecer uma instância de AuthorizationTransaction pronta para uso.
     @Inject
     @RestClient
     SendNotification sendNotification;
@@ -79,11 +87,9 @@ public class TransactionService {
 
         try {
             ResponseSendNotification response = sendNotification.sendNotification(requestSendNotification);
-            notifyStatus = "Notificação enviada com sucesso";
-            return notifyStatus;
+            return "Notificação enviada com sucesso";
         } catch (ClientWebApplicationException err) {
-            notifyStatus = "Falha ao enviar a notificação";
-            return notifyStatus;
+            return "Falha ao enviar a notificação";
         }
     }
 }
