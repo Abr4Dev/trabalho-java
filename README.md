@@ -1,3 +1,4 @@
+./mvnw quarkus:dev
 # picpay-simplificado
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
